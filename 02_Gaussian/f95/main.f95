@@ -32,7 +32,7 @@ program main
      call cal_grad_xy(iend, jend, x, y, wl_mdn  , dwldx_mdn,  dwldy_mdn) 
      call cal_grad_xy(iend, jend, x, y, wl_gaus , dwldx_gaus, dwldy_gaus)
      call cal_grad_xy(iend, jend, x, y, bed_mdn, beddx_mdn, beddy_mdn)
-!!$     call cal_grad_xy(iend, jend, x, y, bel_gaus, beldx_gaus, beldy_gaus)
+     call cal_grad_xy(iend, jend, x, y, bed_gaus, beddx_gaus, beddy_gaus)
 
      wtr_dpth(:,:) = wl_gaus(:,:) - bel_gaus(:,:)
      
@@ -41,9 +41,9 @@ program main
      call output_schalar_vtk
      call output_vector_vtk
 
-     ! do j = 1, jend
-!!$     call drw_cntr
-     ! enddo
+!!$     do j = 1, jend
+!!$        call drw_cntr
+!!$     enddo
 
   enddo
 
@@ -62,7 +62,7 @@ subroutine input_prmtr
   ib       = 0
   intrvl_i = 1
   intrvl_j = 1
-  smthng   = 10
+  smthng   = 1
     
   call system('mkdir ../00_input_vtk/'//trim(case)//'/vtk_schalar_gaussian')
   call system('mkdir ../00_input_vtk/'//trim(case)//'/vtk_vector_gaussian')  
@@ -133,6 +133,7 @@ subroutine set_array
   
   allocate(dwldx_gaus(iend,jend), dwldy_gaus(iend,jend))
   allocate(beldx_gaus(iend,jend), beldy_gaus(iend,jend))
+  allocate(beddx_gaus(iend,jend), beddy_gaus(iend,jend))
   
   allocate(tausx(iend,jend), tausy(iend,jend), taus(iend,jend), wtr_dpth(iend,jend))
   allocate(dis(lend), x_itp(lend), y_itp(lend), bel_itp(lend), bed_itp(lend), wl_itp(lend))
@@ -524,7 +525,8 @@ subroutine output_schalar_vtk
   use filter  
 
   ic = 0
-  do i = 1, iend-120, intrvl_i
+  do i = 1, iend, intrvl_i
+!!$     do i = 1, iend-120, intrvl_i
      ic = ic + 1
   enddo
   
@@ -544,7 +546,7 @@ subroutine output_schalar_vtk
   write(100,'(a,5x,i8,5x,a)')'POINTS', ijc,'float'
 
   do j = 1, jend, intrvl_j          
-     do i = 1, iend-120, intrvl_i
+     do i = 1, iend, intrvl_i
         write(100,*)x(i,j), y(i,j), 0.d0
      enddo
   enddo
@@ -579,7 +581,7 @@ subroutine out_scalar(f, name)
   write(100,'(a,5x,i4,5x,i8,5x,a)')name, 1, ijc, 'double'
 
   do j = 1, jend , intrvl_j          
-     do i = 1, iend-120, intrvl_i
+     do i = 1, iend, intrvl_i
         write(100,*)f(i,j)
      end do
   end do

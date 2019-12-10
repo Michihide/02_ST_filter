@@ -22,6 +22,7 @@ Module filter
   real*8,dimension(:,:),allocatable :: beddx_mdn, beddy_mdn 
   real*8,dimension(:,:),allocatable :: dwldx_gaus, dwldy_gaus
   real*8,dimension(:,:),allocatable :: beldx_gaus, beldy_gaus
+  real*8,dimension(:,:),allocatable :: beddx_gaus, beddy_gaus
   real*8,dimension(:,:),allocatable :: u, v
   real*8,dimension(:,:),allocatable :: tausx, tausy,taus
   real*8,dimension(:,:),allocatable :: an_x, an_y

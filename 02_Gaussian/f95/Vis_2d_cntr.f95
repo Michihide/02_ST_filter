@@ -3,7 +3,8 @@ subroutine drw_cntr
   use filter
   use plplot
 
-  if(k .eq. 1)then
+!!$  if(k .eq. 1)then
+  if(k .eq. 1 .and. j .eq. 1)then
      plparseopts_rc = plparseopts(PL_PARSE_FULL)
      if(plparseopts_rc .ne. 0) stop "plparseopt error"
      call plscol0( 0,255,255,255)
@@ -39,8 +40,9 @@ subroutine drw_cntr
   call set_window(xmin, xmax, ymin, ymax, trim(axis_b), trim(axis_l), trim(axis_t), pxmin, pxmax, pymin, pymax)
   call set_clr_cntr(clrnm, zmin, zmax)
   call plot_cntr(1, iend, 1, jend, x, y, bed_mdn)
-  call plcol0(3)
-  call plot_rctngl(x(1,1), x(iend-120,1), y(1,1), y(1,jend), 3)
+  call plcol0(9)
+  call pljoin(x(1,j), y(1,j), x(iend,j), y(iend,j))
+!!$  call plot_rctngl(x(1,1), x(iend,1), y(1,1), y(1,jend), 3)
   call colbar(0.d0, 1.d0, zmin, zmax, pxmax+0.03d0, pxmax+0.04d0, pymin, pymax, trim(barsname))    
 
 
@@ -56,8 +58,10 @@ subroutine drw_cntr
   call set_window(xmin, xmax, ymin, ymax, trim(axis_b), trim(axis_l), trim(axis_t), pxmin, pxmax, pymin, pymax)
   call set_clr_cntr(clrnm, zmin, zmax)
   call plot_cntr(1, iend, 1, jend, x, y, bed_gaus)
-  call plcol0(3)
-  call plot_rctngl(x(1,1), x(iend-120,1), y(1,1), y(1,jend), 3)
+  call plcol0(9)
+  call pljoin(x(1,j), y(1,j), x(iend,j), y(iend,j))
+  write(*,*)y(iend,j)
+!!$  call plot_rctngl(x(1,1), x(iend-120,1), y(1,1), y(1,jend), 3)
   call colbar(0.d0, 1.d0, zmin, zmax, pxmax+0.03d0, pxmax+0.04d0, pymin, pymax, trim(barsname))   
 
 
@@ -73,27 +77,29 @@ subroutine drw_cntr
   ymin = 0.03d0 ; ymax = 0.08d0
   
   call set_window(xmin, xmax, ymin, ymax, trim(axis_b), trim(axis_l), trim(axis_t), pxmin, pxmax, pymin, pymax)
-!!$  call plot_line(iend, x(:,1), wtr_mdn (:,jend/2), 7)
-!!$  call plot_line(iend, x(:,1), bed_mdn (:,jend/2), 7)
-!!$  call plot_line(iend, x(:,1), wtr_gaus(:,jend/2), 9)
-!!$  call plot_line(iend, x(:,1), bed_gaus(:,jend/2), 9)
-  call plot_line(iend, x(:,1), wtr_mdn (:,jend-1), 3)
-  call plot_line(iend, x(:,1), bed_mdn (:,jend-1), 3)
-  call plot_line(iend, x(:,1), wtr_gaus(:,jend-1), 9)
-  call plot_line(iend, x(:,1), bed_gaus(:,jend-1), 9)
+  call plot_line(iend, x(:,j), wtr_gaus(:,j), 9)
+  call plot_line(iend, x(:,j), bed_gaus(:,j), 9)
+  call plot_line(iend, x(:,j), wtr_mdn (:,j), 7)
+  call plot_line(iend, x(:,j), bed_mdn (:,j), 7)
+  
+!!$  call plot_line(iend, x(:,j), wtr_mdn (:,jend/2), 7)
+!!$  call plot_line(iend, x(:,j), bed_mdn (:,jend/2), 7)
+!!$  call plot_line(iend, x(:,j), wtr_gaus(:,jend/2), 9)
+!!$  call plot_line(iend, x(:,j), bed_gaus(:,jend/2), 9)
+!!$  call plot_line(iend, x(:,j), wtr_mdn (:,jend), 3)
+!!$  call plot_line(iend, x(:,j), bed_mdn (:,jend), 3)
+!!$  call plot_line(iend, x(:,j), wtr_gaus(:,j), 9)
+!!$  call plot_line(iend, x(:,j), bed_gaus(:,j), 9)
 !!$
-!!$  call plot_line(iend, x(:,1), wtr_mdn (:,1), 3)
-!!$  call plot_line(iend, x(:,1), bed_mdn (:,1), 3)
-!!$  call plot_line(iend, x(:,1), wtr_gaus(:,1), 9)
-!!$  call plot_line(iend, x(:,1), bed_gaus(:,1), 9)  
-  call plcol0(3)
-  call pljoin(x(1,1), 0.0d0, x(1,1), 1.0d0)
-  call pljoin(x(iend-120,1), 0.0d0, x(iend-120,1), 1.0d0)
+!!$  call plot_line(iend, x(:,j), wtr_mdn (:,j), 3)
+!!$  call plot_line(iend, x(:,j), bed_mdn (:,j), 3)
+!!$  call plot_line(iend, x(:,j), wtr_gaus(:,j), 9)
+!!$  call plot_line(iend, x(:,j), bed_gaus(:,j), 9)  
 
 
 
   ! ---- lng_water_surface_slope ----
-  axis_l   = 'dHdx'
+  axis_l   = 'dZdx'
   axis_t   = 'Grey:Median, Red:Guassian'     
   axis_b   = 'Distance from upstream(m)'
 
@@ -104,16 +110,14 @@ subroutine drw_cntr
   ymin = 0.0d0 ; ymax = 0.05
   
   call set_window(xmin, xmax, ymin, ymax, trim(axis_b), trim(axis_l), trim(axis_t), pxmin, pxmax, pymin, pymax)
-!!$  call plot_line(iend, x(:,1), dwldx_mdn (:,1), 7)
-  call plot_line(iend, x(:,1), abs(beddx_mdn(:,1)), 7)
-  
-!!$  call plot_line(iend, x(:,1), dwldx_gaus(:,1), 9)
-  call plcol0(3)
-  call pljoin(x(1,1), 0.0d0, x(1,1), 1.0d0)
-  call pljoin(x(iend-120,1), 0.0d0, x(iend-120,1), 1.0d0)
+!!$  call plot_line(iend, x(:,j), dwldx_mdn (:,j), 7)  
+  call plot_line(iend, x(:,j), abs(beddx_gaus(:,j)), 9)
+  call plot_line(iend, x(:,j), abs(beddx_mdn(:,j)), 7)
+!!$  call plot_line(iend, x(:,j), dwldx_gaus(:,j), 9)
 
   
-  if(k .eq. nend)then  
+!!$  if(k .eq. nend)then
+  if(k .eq. nend .and. j.eq.jend)then  
      call plend
   endif
 
