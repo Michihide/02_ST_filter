@@ -76,9 +76,9 @@ program main
      call output_schalar_vtk
      call output_vector_vtk
      
-      if(k.eq.1)then
-            call drw_cntr
-      endif
+     if(k.eq.1)then
+        call drw_cntr
+     endif
      
      call delete_arry     
   enddo
@@ -99,29 +99,29 @@ subroutine input_prmtr
 
   xtrm_min = 0.2d0  
 !!$  xtrm_max =  7.85d0
-  xtrm_max = 9.0d0
+  xtrm_max = 8.2d0
   
 !!$ ---- 20cm ----
 !!$ ytrm_min = -0.04d0
 !!$ ytrm_max =  0.161d0
+
 !!$ ---- 35cm ----
-!!$  ytrm_min = -0.06d0
-!!$  ytrm_max =  0.23d0
-!!$  write(*,*)ytrm_max - ytrm_min
+  ytrm_min = -0.121d0
+  ytrm_max =  0.301d0
 
 !!$ ---- 40cm ----
-!!$  ytrm_min  = -0.121d0
-!!$  ytrm_max  =  0.281d0    
+!!$  ytrm_min  = -0.111d0
+!!$  ytrm_max  =  0.311d0    
 
 !!$ ---- 45cm ----
-  ytrm_min  = -0.141d0
-  ytrm_max  =  0.311d0    
+!!$  ytrm_min  = -0.141d0
+!!$  ytrm_max  =  0.311d0    
   
   intrvl_i = 1                !size of 1 section (cm) 
   intrvl_j = 1  
   
-  dx = 0.01d0
-  dy = 0.01d0
+  dx = 0.02d0
+  dy = 0.02d0
 
   iend = int((xtrm_max-xtrm_min)/dx) + 1 
   jend = int((ytrm_max-ytrm_min)/dy) + 1
@@ -507,7 +507,8 @@ subroutine out_scalar(f, name)
   character(*),intent(in) :: name
 
   write(100,'(a,5x,i4,5x,i8,5x,a)')name, 1, iend*jend, 'double'
-  do j = 1, jend
+!!$  do j = 1, jend
+  do j = jend,1,-1
      do i = 1, iend
         write(100,*)f(i,j)
      end do
@@ -573,7 +574,8 @@ subroutine out_vector(fx, fy, name)
   character(*),intent(in) :: name
 
   write(100,'(a,5x,i4,5x,i8,5x,a)')name, 3, ijc, 'double'
-  do j = 1, jend, intrvl_j
+!!$  do j = 1, jend, intrvl_j
+  do j = jend, 1, -1*intrvl_j
      do i = 1, iend, intrvl_i
         if( fx(i,j) .lt. 0 )then
            write(100,*)0, fy(i,j), 0
