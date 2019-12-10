@@ -553,3 +553,5 @@ Interpolate_error_vtk/f95/Setcmap_01.f95
 Interpolate_error_vtk/f95/SetGradtnColor.dat
 mocm_vtk
 test
+01_Trim_Median/f95/.#main.f95
+02_Gaussian/f95/Vis_check_iline.f95
